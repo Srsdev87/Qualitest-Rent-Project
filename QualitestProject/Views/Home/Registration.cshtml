@@ -1,0 +1,52 @@
+﻿@model IEnumerable<QualitestProject.Models.UsersTable>
+@{
+    ViewBag.Title = "logIn";
+
+}
+
+<h2></h2>
+
+
+
+<div class="col-sm-12">
+    <div class=" col-sm-4">
+
+    </div>
+    <div class="modal-content col-sm-4">
+        <div class="modal-header">
+
+            <h4>Some details about you...</h4>
+        </div>
+
+        <div class="modal-body ">
+            @using (Html.BeginForm("AddNewUser", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                <div>
+                    <img id="user_img1" height="100" width="90" style="border:1px solid" />
+                </div>
+                    <input type="file" id="file1" name="file1" onchange="showuser(this)" placeholder="Picture" class="form-control col-sm-12" />
+
+                            <input type="text" id="uname" placeholder="Name" name="UName" class="form-control col-sm-12" required />
+                            <input type="text" id="ulname" placeholder="Last Name" name="LName" class="form-control col-sm-12" required />
+                            <input type="text" id="uuname" placeholder="Username" name="UserName" class="form-control col-sm-12" required />
+                            <input type="email" id="umail" placeholder="eMail" name="Mail" class="form-control col-sm-12" required />
+                            <input type="password" id="upass" placeholder="Password" name="Pass" class="form-control col-sm-12" required />
+                            <input type="password" id="ucpass" placeholder="Confirm password" name="CPass" class="form-control col-sm-12" required />
+                            <select class="form-control" name="id" id="uisadmin">
+                                <option>true</option>
+                                <option>false</option>
+                            </select>
+                            <div class="modal-header"></div>
+
+                            <input class="btn btn-success col-sm-12 " type="submit" title="save" value="Add New User" />
+
+            }
+        </div>
+
+    </div>
+</div>
+<br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+
+
+
+

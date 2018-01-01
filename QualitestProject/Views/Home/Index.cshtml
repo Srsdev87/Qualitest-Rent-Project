@@ -1,0 +1,101 @@
+﻿
+
+@using QualitestProject.Models
+@model IEnumerable<object>
+@{
+    ViewBag.Title = "Home Page";
+    List<QualitestProject.Models.MovieTable> listMovies = Model.ToList()[0] as List<QualitestProject.Models.MovieTable>;
+    List<QualitestProject.Models.UsersTable> listUsers = Model.ToList()[1] as List<QualitestProject.Models.UsersTable>;
+    int count = 0;
+  
+   
+}
+
+
+
+<div class="jumbotron">
+    <div class="container text-center">
+        <div class="row">
+         
+            @using (QualitestProjDBEntities moviEntities = new QualitestProjDBEntities())
+            {
+                var lastSixMovies = (from p in moviEntities.MovieTables
+                    orderby p.DateAdded descending
+                    select p).Take(6);
+                foreach (var mov in lastSixMovies)
+                {
+                    count++;
+                    if (count < 7)
+                    {
+                        <div class="col-sm-2">
+                            <p>@mov.MovieName</p>
+                            <img src="@mov.MoviePicture" class="img-responsive" width="182" height="268" alt="Image">
+                        </div>
+                    }
+                }
+            }
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+<div class="col-sm-12" style="margin-top: 10%" >
+
+
+    <div class="container-fluid bg-3  col-sm-12">
+        <div class="col-sm-2 sidenav" style="float: left; ">
+            <p><a href="#">Action</a></p>
+            <p><a href="#">Adventure</a></p>
+            <p><a href="#">Animation</a></p>
+            <p><a href="#">Biography</a></p>
+            <p><a href="#">Comedy</a></p>
+            <p><a href="#">Documentary</a></p>
+            <p><a href="#">Drama</a></p>
+            <p><a href="#">Fantasy</a></p>
+            <p><a href="#">Horror</a></p>
+            <p><a href="#">Csi-fi</a></p>
+            <p><a href="#">Cartoon</a></p>
+        </div>
+    
+@foreach (var moviedb in listMovies)
+{
+        <div name="divname" class="row col-sm-10" style="float: right;">
+            <div class="col-sm-10">
+                <div class="col-sm-4" style="float: left;">
+                    <h4  name="movName">@moviedb.MovieName</h4>
+                    <img src="@moviedb.MoviePicture" alt="movie picture" width="182" height="268"/><br/><br/>
+                    <input type="button" onclick="watchMovie(this.value)" value="watch-@moviedb.MovieName" class="col-sm-11 btn btn-info" />
+                </div>
+                <div class="col-sm-6">
+                    <div class="col-sm-12" style="float: right">
+                        <p>@moviedb.MovieBody</p>
+                    </div>
+                    <div class="col-sm-12" style="float: right">
+                        <ul style="list-style: none">
+                            <li><label>Year:</label> @moviedb.Year</li>
+                            <li><label>Country:</label>@moviedb.Country</li>
+                            <li><label>Category:</label>@moviedb.Category</li>
+                            <li><label>Quality:</label>@moviedb.Quality</li>
+                            <li><label>Length:</label>@moviedb.Length</li>
+                        </ul>
+                    </div>
+                 
+                </div>
+                <div class="col-sm-10" style="width: 100%; height: 2px; background: white"></div>
+            </div>
+        </div>
+}
+    </div><br>
+</div>
+
+<br><br>
+
+
+
+

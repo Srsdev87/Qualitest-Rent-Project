@@ -1,0 +1,176 @@
+﻿
+@using System.Activities.Expressions
+@using System.Collections
+@using QualitestProject.Helpers
+@using QualitestProject.Models
+
+@model IEnumerable<object>
+
+@{
+    ViewBag.Title = "Management";
+    QualitestProject.Helpers.CultureHelper.CountryList();
+    List<QualitestProject.Models.MovieTable> listMovies = Model.ToList()[0] as List<QualitestProject.Models.MovieTable>;
+    List<QualitestProject.Models.UsersTable> listUsers = Model.ToList()[1] as List<QualitestProject.Models.UsersTable>;   
+}
+
+
+<h2>Admin Area</h2>
+
+<div class="col-sm-12">
+    <table>
+        <thead>
+        <tr>
+            <th>Movies Management</th>
+            <th>Users Management</th>
+            <th>Movies Rented By Users</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <th class="col-sm-4">
+                <div class="modal-body ">
+                    @using (Html.BeginForm("AddNewMovie", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <div>
+                            <img  id="user_img" height="100" width="90" style="border:1px solid" />
+                        </div>
+                        <input type="file" id="file" name="file" onchange="show(this)"   placeholder="Picture" class="form-control col-sm-12"/>
+                        <input type="text" id="txt_name" placeholder="Movie Name" name="Name" class="form-control col-sm-12" required/>
+                        <input type="text" id="mdescription" placeholder="Movie Description" name="description" class="form-control col-sm-12" required/>
+                      
+                        <select class="form-control" id="selyear" id="txt_id" placeholder="Year" name="id" required>               
+                            @for (int i = DateTime.Now.Year; i >= 1930; i--)
+                            {                             
+                                <option>@i</option>
+                            }
+                        </select>
+       
+                        <select class="form-control" id="countryid" name="country" >
+                          @foreach (var c in @QualitestProject.Helpers.CultureHelper.CountryList())
+                          {
+                            <option>@c.Key - @c.Value</option>
+                          } 
+                        </select>
+                       
+                        <select name="category" id="categoryid" class="form-control col-sm-12">
+                            <option>Action</option>
+                            <option>Adventure</option>
+                            <option>Animation</option>
+                            <option>Biography</option>
+                            <option>Comedy</option>
+                            <option>Documentary</option>
+                            <option>Drama</option>
+                            <option>Fantasy</option>
+                            <option>Horror</option>
+                            <option>Csi-fi</option>
+                            <option>Cartoon</option>
+                        </select>
+                        <select name="quality" id="qualityid" class="form-control col-sm-12" >
+                            <option>TS</option>
+                            <option>DVDRip</option>
+                            <option>HD</option>
+                            <option>UHD</option>
+                            <option>CAMRip</option>
+                        </select>
+                        <input type="time" id="mlength" name="length" class="form-control col-sm-12" required/>
+
+                        <div class="modal-header"></div>
+                        <input class="btn btn-success col-sm-12 " type="submit" value="Add New Movie" onclick="addnewMovie()"/>
+                    }
+                    <select class="form-control" type="submit" name="Name" onchange="getMovieDetails()">
+                        @foreach (var moviedb in listMovies)
+                        {
+                            <option id="getdetails">@moviedb.MovieName</option>
+                        }
+                    </select>
+                 
+                   
+                        <input class="btn btn-success col-sm-12 " type="submit" value="Update Movie" onclick="UpdateMovie()"/>
+
+                    @using (Html.BeginForm("DeleteMovie", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                            <select class="form-control" type="submit" name="Name" onchange="getPicture()">
+                                @foreach (var moviedb in listMovies)
+                                {
+                                    <option id="getname" >@moviedb.MovieName</option>
+                                }
+                            </select>
+                            <input class="btn btn-success col-sm-12 " type="submit" value="Delete Movie" />
+                    }
+                </div>
+                   
+            </th>
+            <th class="col-sm-4">
+              
+                    <div class="modal-body ">
+
+                         
+                        @using (Html.BeginForm("AddNewUser", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <div>
+                                <img id="user_img1" height="100" width="90" style="border:1px solid" />
+                            </div>
+                            <input type="file" id="file1" name="file1" onchange="showuser(this)" placeholder="Picture" class="form-control col-sm-12" />
+                       
+                            <input type="text" id="uname" placeholder="Name" name="UName" class="form-control col-sm-12" required />
+                            <input type="text" id="ulname" placeholder="Last Name" name="LName" class="form-control col-sm-12" required />
+                            <input type="text" id="uuname" placeholder="Username" name="UserName" class="form-control col-sm-12" required />
+                            <input type="email" id="umail" placeholder="eMail" name="Mail" class="form-control col-sm-12" required />
+                            <input type="password" id="upass" placeholder="Password" name="Pass" class="form-control col-sm-12" required />
+                            <input type="password" id="ucpass" placeholder="Confirm password" name="CPass" class="form-control col-sm-12" required />
+                            <select class="form-control" name="id"  id="uisadmin">
+                                <option>true</option>
+                                <option>false</option>
+                            </select>
+                           
+
+                            <div class="modal-header"></div>
+
+                            <input class="btn btn-success col-sm-12 " type="submit" title="save" value="Add New User" />
+                         
+                        }
+                      
+                        <select class="form-control" type="submit" name="UName" onchange="getUserDetails()">
+                            @foreach (var userdb in listUsers)
+                            {
+                                <option id="getdetails">@userdb.Username</option>
+                            }
+                        </select>
+                        <input class="btn btn-success col-sm-12 " type="button" value="Update User" onclick="updateUser()" />
+
+                        @using (Html.BeginForm("DeleteUser", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            <select class="form-control" type="submit" name="UName" onchange="getUserPicture()">
+                                @foreach (var userdb in listUsers)
+                                {
+                                    <option >@userdb.Username</option>
+                                }
+                            </select>
+
+                            <input class="btn btn-success col-sm-12 " type="submit" value="Delete User"  />
+                        }
+                       
+                    </div>
+
+              
+            </th>
+            <th class="col-sm-4" style="margin-bottom:500px">
+                            <select class="form-control"  id="newmovie1" name="usersName" onchange="getMovieList(this.value)">
+                                @foreach (var userdb in listUsers)
+                                {
+                                    <option>@userdb.Username</option>
+                                }
+                            </select>
+                        <ol id="div1" style="list-style: none;">
+
+                        </ol>
+                <div style="margin-bottom:450px"></div>
+            </th>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<input style="visibility:hidden" type="text" id="userId" class="form-control col-sm-12" required />
+<input style="visibility:hidden" type="text" id="movieId" name="ids" class="form-control col-sm-12" required />
+
+
